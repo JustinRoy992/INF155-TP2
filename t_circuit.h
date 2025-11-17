@@ -16,7 +16,7 @@ Dernière modification: Eric Thé, 2025-11-1
 
 #include "t_source.h"
 #include "t_porte.h"
-#include "t_dest.h"
+#include "t_destination.h"
 
 
 //Définit le type t_circuit qui permet de stocker l'information relative à un circuit. 
