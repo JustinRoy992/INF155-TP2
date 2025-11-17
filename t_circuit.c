@@ -81,3 +81,10 @@ t_source* circuit_get_source(const t_circuit* circuit, int pos)
 {
 
 }
+// -circuit-intit()
+// -circuit_destroy() // 3 boucles
+// -circuit_ajouter_porte()
+//... _source()
+//... _destroy()
+// TEST:
+>>>>>> > b8eb6a6
