@@ -28,6 +28,11 @@ t_pin_sortie* pin_sortie_init(void)
 //emile
 void pin_sortie_destroy(t_pin_sortie* pin)
 {
+	//Libération de toute mémoire occupée par le pin de sortie.
+	free(pin->liaisons);
+	free(pin->nb_liaisons);
+	free(pin->valeur);
+	free(pin);
 
 }
 
@@ -47,7 +52,16 @@ void pin_sortie_set_valeur(t_pin_sortie* pin, int valeur)
 //emile
 int pin_sortie_ajouter_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_entree)
 {
-
+	if(pin_sortie->nb_liaisons >= SORTIE_MAX_LIAISONS) {
+		//Nombre maximal de liaisons atteint
+		return 0; //faux
+	}
+	else {
+		//On envoie le nom de la pin entree dans le tag liaison de la pin sortie
+		pin_sortie->liaisons[(pin_sortie->nb_liaisons) + 1] = pin_entree;
+		pin_sortie->nb_liaisons++;
+		return 1; //vrai
+	}
 }
 
 
@@ -67,6 +81,17 @@ int pin_sortie_est_reliee(t_pin_sortie* pin)
 //emile
 int pin_sortie_propager_signal(t_pin_sortie* pin)
 {
+	int nombre;
+	
+//On vérifie si le pin de sortie est actif et qu'il a des liaisons
+// si oui on propage la valeur du pin de sortie à tous les pins d'entrées reliés
+		if (pin->valeur != -1 && pin->nb_liaisons < 0) {
+			for (nombre = 0; nombre < pin->nb_liaisons; nombre++) {
+				pin->liaisons[nombre]->valeur = pin->valeur;
+			}
+			return 1; //vrai
+		}
+		else return 0; //faux
 
 }
 
