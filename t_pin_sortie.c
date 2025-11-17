@@ -95,13 +95,9 @@ int pin_sortie_ajouter_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_en
 	}
 
 	else {
-<<<<<<< Updated upstream
-		//On envoie le nom de la pin entree dans le tag liaison de la pin sortie
-		pin_sortie->liaisons[pin_sortie->nb_liaisons] = pin_entree;
-=======
+
 		/*Renvoie du nom de la pin entree dans le tag liaison de la pin sortie*/
 		pin_sortie->liaisons[pin_sortie->nb_liaisons] = pin_entree;
->>>>>>> Stashed changes
 		pin_sortie->nb_liaisons++;
 		return 1; /*Retourne vrai*/
 	}
