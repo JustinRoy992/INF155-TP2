@@ -1,32 +1,32 @@
 /*
 Module: T_PIN_SORTIE
-Description: Définit le type t_pin_sortie. Un t_pin_sortie est un point de connexion appartenant
-			 à un élément du circuit qui émet un signal (mais n'en reçoit pas).
-			 Les éléments d'un circuit ayant une pin sortie sont les portes (les sorties des portes)
-			 ainsi que les entrées du circuit.
+Description: Dï¿½finit le type t_pin_sortie. Un t_pin_sortie est un point de connexion appartenant
+			 ï¿½ un ï¿½lï¿½ment du circuit qui ï¿½met un signal (mais n'en reï¿½oit pas).
+			 Les ï¿½lï¿½ments d'un circuit ayant une pin sortie sont les portes (les sorties des portes)
+			 ainsi que les entrï¿½es du circuit.
 
-			 Pour qu'un pin de sortie émette un signal, ce signal doit être stocké dans le champs
-			 valeur.  Un t_pin_sortie qui est inactif (pas alimentée) aura la valeur -1.
+			 Pour qu'un pin de sortie ï¿½mette un signal, ce signal doit ï¿½tre stockï¿½ dans le champs
+			 valeur.  Un t_pin_sortie qui est inactif (pas alimentï¿½e) aura la valeur -1.
 
-			 Un pin de sortie permet relie le composant auquel il appartient à d'autres composants.
-			 Il doit être reliée aux "pins d'entrée" des composants auquel on souhaite se connecter.
+			 Un pin de sortie permet relie le composant auquel il appartient ï¿½ d'autres composants.
+			 Il doit ï¿½tre reliï¿½e aux "pins d'entrï¿½e" des composants auquel on souhaite se connecter.
 
-			 Note: Contrairement à un pin d'entrée, un pin de sortie peut être reliée à plusieurs
-			 pins d'entrées : Ceci permet d'émettre le même signal à plusieurs composants.
+			 Note: Contrairement ï¿½ un pin d'entrï¿½e, un pin de sortie peut ï¿½tre reliï¿½e ï¿½ plusieurs
+			 pins d'entrï¿½es : Ceci permet d'ï¿½mettre le mï¿½me signal ï¿½ plusieurs composants.
 
-Auteur: Sébastien Hubert, Justin roy, Émile Larochelle
+Auteur: Sï¿½bastien Hubert, Justin roy, ï¿½mile Larochelle
 */
 
 #include "t_pin_sortie.h"
 
 //-------------------------------------------------------------------------------------//
 
-/*Crée un nouveau pin de sortie qui contient aucune valeur et pas de liaison.*/
+/*Crï¿½e un nouveau pin de sortie qui contient aucune valeur et pas de liaison.*/
 t_pin_sortie* pin_sortie_init(void) {
 
 	t_pin_sortie* nouv_pin = NULL; /*Nouveau pin de sortie dynamique*/
 
-	nouv_pin = (t_pin_sortie*)malloc(sizeof(t_pin_sortie)); /*Création du pin dynamique*/
+	nouv_pin = (t_pin_sortie*)malloc(sizeof(t_pin_sortie)); /*Crï¿½ation du pin dynamique*/
 
 	/*Initiation: ce pin contient aucune valeur et pas de liaison.*/
 	nouv_pin->valeur = INACTIF;
@@ -42,10 +42,10 @@ t_pin_sortie* pin_sortie_init(void) {
 
 //-------------------------------------------------------------------------------------//
 
-/*Libère la mémoire occupée par le pin de sortie.*/
+/*Libï¿½re la mï¿½moire occupï¿½e par le pin de sortie.*/
 void pin_sortie_destroy(t_pin_sortie* pin) {
 
-	/*Libération de toute mémoire occupée par le pin de sortie.*/
+	/*Libï¿½ration de toute mï¿½moire occupï¿½e par le pin de sortie.*/
 	free(pin->liaisons);
 	free(pin->nb_liaisons);
 	free(pin->valeur);
@@ -61,7 +61,7 @@ void pin_sortie_destroy(t_pin_sortie* pin) {
 /*Accesseur du champ valeur.*/
 int pin_sortie_get_valeur(t_pin_sortie* pin) {
 
-
+	return pin->valeur;
 }
 
 //-------------------------------------------------------------------------------------//
@@ -69,10 +69,10 @@ int pin_sortie_get_valeur(t_pin_sortie* pin) {
 /*Mutateur du champ valeur.*/
 void pin_sortie_set_valeur(t_pin_sortie* pin, int valeur){
 
-	/*Valeur = à soit - 1, 0, 1*/
+	/*Valeur = ï¿½ soit - 1, 0, 1*/
 	if (valeur < INACTIF || valeur > 1) { 
 	
-		return;  /*Valeur erronée*/
+		return;  /*Valeur erronï¿½e*/
 
 	}
 	pin->valeur = valeur; /*Assigne la valeur au pin*/
@@ -84,10 +84,10 @@ void pin_sortie_set_valeur(t_pin_sortie* pin, int valeur){
 
 //-------------------------------------------------------------------------------------//
 
-/*Relie le pin de sortie à un pin d'entrée reçu en paramètre.*/
+/*Relie le pin de sortie ï¿½ un pin d'entrï¿½e reï¿½u en paramï¿½tre.*/
 int pin_sortie_ajouter_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_entree) {
 
-	/*Vérifie si le nombre maximal de liaisons est atteint*/
+	/*Vï¿½rifie si le nombre maximal de liaisons est atteint*/
 	if (pin_sortie->nb_liaisons >= SORTIE_MAX_LIAISONS) {
 
 		return 0; /*Nombre maximal de liaisons atteint*/
@@ -108,9 +108,19 @@ int pin_sortie_ajouter_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_en
 
 //-------------------------------------------------------------------------------------//
 
-/*Supprime un lien existant entre le pin de sortie et un pin d'entree reçu en paramètre.*/
+/*Supprime un lien existant entre le pin de sortie et un pin d'entree reï¿½u en paramï¿½tre.*/
 void pin_sortie_supprimer_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_entree) {
+	int i, trouvee = 0;
 
+	for (i = 0; i < pin_sortie->nb_liaisons; i++)
+	{
+		if (pin_sortie->liaisons[i] == pin_entree || trouvee)
+		{
+			trouvee == 1;
+			pin_sortie->liaisons[i] == pin_sortie->liaisons[i + 1];
+		}
+	}
+	pin_sortie->nb_liaisons--;
 }
 
 //-------------------------------------------------------------------------------------//
@@ -118,10 +128,10 @@ void pin_sortie_supprimer_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin
 
 //-------------------------------------------------------------------------------------//
 
-/*Permet de vérifier si un pin de sortie est reliée à un pin d'entrée.*/
+/*Permet de vï¿½rifier si un pin de sortie est reliï¿½e ï¿½ un pin d'entrï¿½e.*/
 int pin_sortie_est_reliee(t_pin_sortie* pin){
 
-	return pin->nb_liaisons != NULL; /*Retourne vrai si le pin est relié*/
+	return pin->nb_liaisons != NULL; /*Retourne vrai si le pin est reliï¿½*/
 
 }
 
@@ -130,15 +140,15 @@ int pin_sortie_est_reliee(t_pin_sortie* pin){
 
 //-------------------------------------------------------------------------------------//
 
-/*Propage le signal à partir du pin de sortie passé en paramètre.*/
+/*Propage le signal ï¿½ partir du pin de sortie passï¿½ en paramï¿½tre.*/
 int pin_sortie_propager_signal(t_pin_sortie* pin) {
 
 	int nombre; /*Compteur pour les liaisons*/
 
-	/*Vérification si le pin de sortie est actif et qu'il a des liaisons*/
+	/*Vï¿½rification si le pin de sortie est actif et qu'il a des liaisons*/
 	if (pin->valeur != -1 && pin->nb_liaisons < 0) {
 
-		/*Propager la valeur du pin de sortie à tous les pins d'entrées reliés*/
+		/*Propager la valeur du pin de sortie ï¿½ tous les pins d'entrï¿½es reliï¿½s*/
 		for (nombre = 0; nombre < pin->nb_liaisons; nombre++) {
 			pin->liaisons[nombre]->valeur = pin->valeur;
 		}
@@ -155,10 +165,10 @@ int pin_sortie_propager_signal(t_pin_sortie* pin) {
 
 //-------------------------------------------------------------------------------------//
 
-/*Réinitialise un pin de sortie.*/
+/*Rï¿½initialise un pin de sortie.*/
 void pin_sortie_reset(t_pin_sortie* pin) {
 
-
+	pin->valeur = INACTIF;
 
 }
 
