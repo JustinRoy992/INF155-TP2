@@ -58,7 +58,7 @@ int pin_sortie_ajouter_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_en
 	}
 	else {
 		//On envoie le nom de la pin entree dans le tag liaison de la pin sortie
-		pin_sortie->liaisons[(pin_sortie->nb_liaisons) + 1] = pin_entree;
+		pin_sortie->liaisons[pin_sortie->nb_liaisons] = pin_entree;
 		pin_sortie->nb_liaisons++;
 		return 1; //vrai
 	}
