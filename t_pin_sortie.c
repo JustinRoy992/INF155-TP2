@@ -19,46 +19,59 @@ Auteur: Sébastien Hubert, Justin roy, Émile Larochelle
 
 #include "t_pin_sortie.h"
 
+//justin
 t_pin_sortie* pin_sortie_init(void) 
 {
 
 }
 
+//emile
 void pin_sortie_destroy(t_pin_sortie* pin)
 {
 
 }
 
+//sebas
 int pin_sortie_get_valeur(t_pin_sortie* pin)
 {
 
 }
 
+//justin
 void pin_sortie_set_valeur(t_pin_sortie* pin, int valeur)
 {
 
 }
 
+
+//emile
 int pin_sortie_ajouter_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_entree)
 {
 
 }
 
+
+//sebas
 void pin_sortie_supprimer_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin_entree)
 {
 
 }
 
+
+//justin
 int pin_sortie_est_reliee(t_pin_sortie* pin)
 {
 
 }
 
+//emile
 int pin_sortie_propager_signal(t_pin_sortie* pin)
 {
 
 }
 
+
+//sebas
 void pin_sortie_reset(t_pin_sortie* pin)
 {
 
