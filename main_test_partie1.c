@@ -8,7 +8,7 @@
 */
 #include <assert.h>
 #include "t_source.h"
-#include "t_dest.h"
+#include "t_destination.h"
 
 int main(void)
 {
