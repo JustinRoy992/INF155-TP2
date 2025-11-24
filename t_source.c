@@ -30,9 +30,7 @@ t_source* source_init(int id, char* nom)
 void source_destroy(t_source* source)
 {
 	/*Libération de toute mémoire occupée par la source.*/
-	free(source->pin);
 	free(source->nom);
-	free(source->id);
 	free(source);
 }
 

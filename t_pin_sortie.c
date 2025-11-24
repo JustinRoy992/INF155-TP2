@@ -46,9 +46,6 @@ t_pin_sortie* pin_sortie_init(void) {
 void pin_sortie_destroy(t_pin_sortie* pin) {
 
 	/*Libération de toute mémoire occupée par le pin de sortie.*/
-	free(pin->liaisons);
-	free(pin->nb_liaisons);
-	free(pin->valeur);
 	free(pin);
 
 }
