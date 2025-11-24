@@ -16,11 +16,11 @@ t_source* source_init(int id, char* nom)
 
 	nouvelle_source = (t_source*) malloc(sizeof(t_source));
 
-	nouvelle_source->id = INACTIF;
-	nouvelle_source->pin = NULL;
+	nouvelle_source->id = id;
+	nouvelle_source->pin = pin_sortie_init();
 	
 	nouvelle_source->nom = (char*)calloc(NOM_TAILLE_MAX, sizeof(char));
-
+	strcpy(nouvelle_source->nom, nom);
 	return nouvelle_source;
 
 }
@@ -31,6 +31,7 @@ void source_destroy(t_source* source)
 {
 	/*Libération de toute mémoire occupée par la source.*/
 	free(source->nom);
+	pin_sortie_destroy(source->pin);
 	free(source);
 }
 
