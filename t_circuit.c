@@ -31,9 +31,23 @@ t_circuit* circuit_init(void)
 /*Fonction qui détruit un circuit et libère la mémoire associée.*/
 void circuit_destroy(t_circuit* circuit)
 {
-	source_destroy(circuit->sources); /*Libère la mémoire des sources*/
-	dest_destroy(circuit->destinations); /*Libère la mémoire des destinations*/
-	porte_destroy(circuit->portes); /*Libère la mémoire des portes*/
+	int i; /*Variable pour l'itération*/
+
+	/*Pour toutes les portes du circuit.*/
+	for (i = 0; i < circuit->nb_portes; i++)
+	{
+		porte_destroy(circuit->portes[i]); /*Destruction la porte.*/
+	}
+	/*Pour toutes les sources du circuit.*/
+	for (i = 0; i < circuit->nb_sources; i++)
+	{
+		source_destroy(circuit->sources[i]); /*Destruction la source.*/
+	}
+	/*Pour toutes les destinations du circuit.*/
+	for (i = 0; i < circuit->nb_destinations; i++)
+	{
+		dest_destroy(circuit->destinations[i]); /*Destruction la destination.*/
+	}
 
 	free(circuit); /*Libère la mémoire du circuit*/
 }
