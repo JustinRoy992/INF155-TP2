@@ -26,6 +26,8 @@ Dernière modification: Eric Thé, 2025-11-1
 
 #define NOM_TAILLE_MAX 3  	//Taille maximale du nom d'un composant (source, porte ou destination)
 #define INACTIF    -1		//Indique qu'un composant d'entrée ou de sortie est inactif
+#define TRUE	   1		//Valeur booléenne vrai
+#define FALSE	   0		//Valeur booléenne faux
 
 //Cette redéclaration de type est nécessaire au cas où ce fichier est compilé AVANT "t_pin_sortie.h"
 typedef struct t_pin_sortie t_pin_sortie;

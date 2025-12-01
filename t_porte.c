@@ -25,12 +25,11 @@ t_porte* porte_init(int id, e_types_portes type, char* nom)
 
 	porte->id = id; /*Initialiser l'identifiant de la porte.*/
 	porte->type = type; /*Initialiser le type de la porte.*/
-	porte->nom = strdup(nom); /*Allouer de la mémoire et copier le nom de la porte.*/
 
-	/*Vérifier si l'allocation de mémoire a réussi.*/
-	if (porte == NULL) {
-		return NULL; /*Retourner NULL si l'allocation a échoué.*/
-	}
+	/*Création de la chaine dynamique pour le nom de la porte*/
+	porte->nom = (char*)calloc(NOM_TAILLE_MAX, sizeof(char));
+	strcpy(porte->nom, nom); /*Copie du nom dans la chaine dynamique*/
+
 	/* Porte AND ou OR à deux entrées.*/
    if (type == PORTE_ET || type == PORTE_OU) {
 	   porte->nb_entrees = 2; /*Initialiser le nombre d'entrées à 2.*/
@@ -44,9 +43,7 @@ t_porte* porte_init(int id, e_types_portes type, char* nom)
 	   porte->entrees[0] = pin_entree_init(); /*Initialiser la seule entrée.*/
 	   porte->sortie = pin_sortie_init();    /*Initialiser la sortie.*/
    }
-
    return porte; /*Retourner le pointeur vers la nouvelle porte créée.*/
-
 }
 
 //-------------------------------------------------------------------------------------//
@@ -57,13 +54,18 @@ t_porte* porte_init(int id, e_types_portes type, char* nom)
 /*Fonction qui détruit une porte et libère la mémoire associée.*/
 void porte_destroy(t_porte* porte)
 {
-	/*Vérifier si le pointeur de la porte n'est pas NULL avant de libérer la mémoire.*/
-	if (porte != NULL) {
-		free(porte->nom); /*Libérer la mémoire du nom de la porte.*/
+	free(porte->nom); /*Libérer la mémoire du nom de la porte.*/
+	free(porte->sortie); /*Libérer la mémoire de la sortie.*/
+	free(porte); /*Libérer la mémoire de la structure de la porte.*/
+
+	/*Vérifier si la porte a seulement une entrée*/
+	if(porte->nb_entrees == 1) {
+		free(porte->entrees[0]); /*Libérer la mémoire de la seule entrée.*/
+	}
+	/*Vérifier si la porte a deux entrées*/
+	if (porte->nb_entrees == 2) {
 		free(porte->entrees[0]); /*Libérer la mémoire de la première entrée.*/
 		free(porte->entrees[1]); /*Libérer la mémoire de la deuxième entrée.*/
-		free(porte->sortie); /*Libérer la mémoire de la sortie.*/
-		free(porte); /*Libérer la mémoire de la structure de la porte.*/
 	}
 }
 
@@ -113,7 +115,6 @@ void porte_calculer_sortie(t_porte* porte)
 		/*Mettre à jour la valeur de la sortie de la porte.*/
 		pin_sortie_set_valeur(porte->sortie, val);
 	}
-
 }
 
 //-------------------------------------------------------------------------------------//
@@ -124,19 +125,14 @@ void porte_calculer_sortie(t_porte* porte)
 /*Fonction qui relie une entrée de la porte à une source de signal.*/
 int porte_relier(t_porte* porte, int num_entree, char* nom_sortie, t_pin_sortie* source)
 {
-	/*Vérifier si le pointeur de la porte n'est pas NULL.*/
-	if (porte == NULL) {
-		return 0; /*Retourner faux.*/
-	}
-
 	/*Vérifier si l'indice de l'entrée est valide.*/
 	if (!(num_entree == 0 || num_entree == 1)) {
-		return 0; /*Retourner faux.*/
+		return FALSE; /*Retourner faux.*/
 	}
 
 	/*Relier l'entrée spécifiée au pin de sortie source.*/
 	pin_entree_relier(porte->entrees[num_entree], nom_sortie, source);
-	return 1; /*Retourner vrai pour indiquer que la liaison a été effectuée.*/
+	return TRUE; /*Retourner vrai pour indiquer que la liaison a été effectuée.*/
 }
 
 //-------------------------------------------------------------------------------------//
@@ -149,24 +145,19 @@ int porte_est_reliee(t_porte* porte)
 {
 	int i; /*Variable pour l'itération.*/
 
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return 0; /*Retourner faux.*/
-	}
-
 	/*Vérifier si toutes les entrées de la porte sont reliées.*/
 	for (i = 0; i < porte->nb_entrees; i++) {
 		if (!pin_entree_est_reliee(porte->entrees[i])) {
-			return 0; /*Retourner faux si une entrée n'est pas reliée.*/
+			return FALSE; /*Retourner faux si une entrée n'est pas reliée.*/
 		}
 	}
 
 	/*Vérifier si la sortie de la porte est reliée.*/
 	if (!pin_sortie_est_reliee(porte->sortie)) {
-		return 0; /*Retourner faux si la sortie n'est pas reliée.*/
+		return FALSE; /*Retourner faux si la sortie n'est pas reliée.*/
 	}
 
-	return 1; /*Retourner vrai si la porte est entièrement reliée.*/
+	return TRUE; /*Retourner vrai si la porte est entièrement reliée.*/
 }
 
 //-------------------------------------------------------------------------------------//
@@ -177,7 +168,6 @@ int porte_est_reliee(t_porte* porte)
 /*Fonction qui réinitialise une porte.*/
 void porte_reset(t_porte* porte)
 {
-
 	int i; /*Variable pour l'itération.*/
 
 	/*Réinitialiser les valeurs des entrées.*/
@@ -185,9 +175,7 @@ void porte_reset(t_porte* porte)
 		pin_entree_reset(porte->entrees[i]);
 	}
 
-	/*Réinitialiser la valeur de la sortie.*/
-	pin_sortie_reset(porte->sortie);
-
+	pin_sortie_reset(porte->sortie); /*Réinitialiser la valeur de la sortie.*/
 }
 
 //-------------------------------------------------------------------------------------//
@@ -202,18 +190,21 @@ int porte_propager_signal(t_porte* porte)
 
 	/*Vérifier si toutes les entrées de la porte ont des valeurs valides.*/
 	for (i = 0; i < porte->nb_entrees; i++) {
-		if (pin_entree_get_valeur(porte->entrees[i]) == -1) {
-			return 0; /*Retourner faux si une entrée n'a pas de valeur valide.*/
+		if (pin_entree_get_valeur(porte->entrees[i]) == INACTIF) {
+			return FALSE; /*Retourner faux si une entrée n'a pas de valeur valide.*/
 		}
 	}
 
 	/*Calculer la valeur de la sortie de la porte.*/
-	porte_calculer_sortie(porte);
+	porte_calculer_sortie(porte); 
 	/*Propager le signal à partir du pin de sortie de la porte.*/
 	pin_sortie_propager_signal(porte->sortie);
 
-	return 1; /*Retourner vrai pour indiquer que le signal a été propagé.*/
+	if (pin_sortie_propager_signal(porte->sortie) == FALSE) {
+		return FALSE; /*Retourner faux si le signal n'a pas pu être propagé.*/
+	}
 
+	return TRUE; /*Retourner vrai pour indiquer que le signal a été propagé.*/
 }
 
 //-------------------------------------------------------------------------------------//
@@ -224,11 +215,6 @@ int porte_propager_signal(t_porte* porte)
 /*Fonction qui retourne l'identifiant de la porte.*/
 int porte_get_id(const t_porte* porte)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return -1; /*Retourner une valeur invalide.*/
-	}
-
 	return porte->id; /*Retourner l'identifiant de la porte.*/
 }
 
@@ -240,11 +226,6 @@ int porte_get_id(const t_porte* porte)
 /*Fonction qui retourne le nom de la porte.*/
 char* porte_get_nom(const t_porte* porte)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return NULL; /*Retourner une valeur invalide.*/
-	}
-
 	return porte->nom; /*Retourner le nom de la porte.*/
 }
 
@@ -256,11 +237,6 @@ char* porte_get_nom(const t_porte* porte)
 /*Fonction qui retourne le nombre d'entrées de la porte.*/
 int porte_get_nb_entrees(const t_porte* porte)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return -1; /*Retourner une valeur invalide.*/
-	}
-
 	return porte->nb_entrees; /*Retourner le nombre d'entrées de la porte.*/
 }
 
@@ -272,11 +248,6 @@ int porte_get_nb_entrees(const t_porte* porte)
 /*Fonction qui retourne le type de la porte.*/
 e_types_portes porte_get_type(const t_porte* porte)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return -1; /*Retourner une valeur invalide.*/
-	}
-
 	return porte->type; /*Retourner le type de la porte.*/
 }
 
@@ -288,16 +259,6 @@ e_types_portes porte_get_type(const t_porte* porte)
 /*Fonction qui retourne un pointeur vers un des pins d'entrée de la porte.*/
 t_pin_entree* porte_get_pin_entree(const t_porte* porte, int num)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return NULL; /*Retourner une valeur invalide.*/
-	}
-
-	/*Vérifier si le numéro d'entrée est valide.*/
-	if (!(num == 0 || num == 1 )) {
-		return NULL; /*Retourner une valeur invalide.*/
-	}
-
 	return porte->entrees[num]; /*Retourner le pin d'entrée correspondant.*/
 }
 
@@ -309,11 +270,6 @@ t_pin_entree* porte_get_pin_entree(const t_porte* porte, int num)
 /*Fonction qui retourne un pointeur vers le pin de sortie de la porte.*/
 t_pin_sortie* porte_get_pin_sortie(const t_porte* porte)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL) {
-		return NULL; /*Retourner une valeur invalide.*/
-	}
-
 	return porte->sortie; /*Retourner le pin de sortie de la porte.*/
 }
 
@@ -325,16 +281,8 @@ t_pin_sortie* porte_get_pin_sortie(const t_porte* porte)
 /*Fonction qui sérialise les informations de la porte dans une chaîne de caractères.*/
 void porte_serialiser(const t_porte* porte, char* resultat)
 {
-	/*Vérifier si le pointeur de la porte est NULL.*/
-	if (porte == NULL || resultat == NULL) {
-		return; /*Retourner sans rien faire si une valeur est invalide.*/
-	}
-
-	/*Sérialiser les informations de la porte dans la chaîne de caractères fournie.*/
-	sprintf(resultat, "Porte ID: %d\nNom: %s\nType: %d\nNombre d'entrées: %d\n",
-		porte_get_id(porte), porte_get_nom(porte), porte_get_type(porte), 
-		porte_get_nb_entrees(porte));
-
+	/*Sérialiser les informations de la porte dans une chaîne de caractères.*/
+	sprintf(resultat, "%d %d %s", porte->id, porte->type, porte->nom);
 }
 
 //-------------------------------------------------------------------------------------//
