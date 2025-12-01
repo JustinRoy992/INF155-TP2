@@ -226,7 +226,7 @@ int circuit_get_nb_portes(const t_circuit* circuit)
 t_porte* circuit_get_porte(const t_circuit* circuit, int pos)
 {
 	/*Vérifie si la position est valide.*/
-	if (0 < pos && pos < circuit->nb_portes)
+	if (0 <= pos && pos < circuit->nb_portes)
 	{
 		return circuit->portes[pos]; /*Retourne la porte à la position donnée.*/
 	}
@@ -254,7 +254,7 @@ int circuit_get_nb_dest(const t_circuit* circuit)
 t_dest* circuit_get_dest(const t_circuit* circuit, int pos)
 {
 	/*Vérifie si la position est valide.*/
-	if (0 < pos && pos < circuit->nb_destinations)
+	if (0 <= pos && pos < circuit->nb_destinations)
 	{
 		/*Retourne la destination à la position donnée.*/
 		return circuit->destinations[pos]; 
@@ -283,7 +283,7 @@ int circuit_get_nb_sources(const t_circuit* circuit)
 t_source* circuit_get_source(const t_circuit* circuit, int pos)
 { 
 	/*Vérifie si la position est valide.*/
-	if (0 < pos && pos < circuit->nb_sources)
+	if (0 <= pos && pos < circuit->nb_sources)
 	{
 		return circuit->sources[pos]; /*Retourne la source à la position donnée.*/
 	}
