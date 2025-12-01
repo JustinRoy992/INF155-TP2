@@ -122,6 +122,7 @@ t_dest* circuit_ajouter_dest(t_circuit* circuit, int id, char* nom)
 int circuit_est_valide(t_circuit* circuit)
 {
 	int i; /*Variable pour l'itération*/
+	int valide = 1;
 	
 	/*Vérification pour toutes les portes.*/
 	for (i = 0; i < circuit->nb_portes; i++)
@@ -129,7 +130,8 @@ int circuit_est_valide(t_circuit* circuit)
 		/*Si la porte n'est pas reliée.*/
 		if (!porte_est_reliee(circuit->portes[i]))
 		{
-			return 0; /*Retourne Faux.*/
+			printf("La porte %s n'est pas reliee!\n", porte_get_nom(circuit->portes[i]));
+			valide = 0;
 		}
 	}
 	/*Vérification pour tous les sources.*/
@@ -138,7 +140,8 @@ int circuit_est_valide(t_circuit* circuit)
 		/*Si la source n'est pas reliée.*/
 		if (!source_est_reliee(circuit->sources))
 		{
-			return 0; /*Retourne Faux.*/
+			printf("La source %s n'est pas reliee!\n", source_get_nom(circuit->sources[i]));
+			valide = 0;
 		}
 	}
 	/*Vérification pour toutes les destinations.*/
@@ -147,10 +150,11 @@ int circuit_est_valide(t_circuit* circuit)
 		/*Si la destination n'est pas reliée.*/
 		if (!dest_est_reliee(circuit->destinations[i]))
 		{
-			return 0; /*Retourne Faux.*/
+			printf("La destination %s d'est pas reliee!\n", dest_get_nom(circuit->destinations[i]));
+			valide = 0;
 		}
 	}
-	return 1; /*Retourne Vrai si le circuit est valide.*/
+	return valide;
 }
 
 //-------------------------------------------------------------------------------------//
