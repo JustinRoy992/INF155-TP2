@@ -165,7 +165,16 @@ int circuit_est_valide(t_circuit* circuit)
 /*Fonction qui applique un signal aux sources du circuit.*/
 int circuit_appliquer_signal(t_circuit* circuit, int signal[], int nb_bits)
 {
-	
+	int nombre;
+
+	if (nb_bits < circuit->nb_sources)
+		return 0; /*Retourne 0 si le nb_bits n<est pas suffisant*/
+	for (nombre = 0; nombre < nb_bits; nombre++)
+	{
+		circuit->sources[nombre]->pin->valeur = signal[nombre]; /*Applique le signal à la source*/
+	}
+	return 1; /*Retourne 1 si le signal a été appliqué*/
+}
 }
 
 //-------------------------------------------------------------------------------------//
@@ -203,7 +212,44 @@ void circuit_reset(t_circuit* circuit)
 /*Fonction qui propage le signal dans le circuit.*/
 int circuit_propager_signal(t_circuit* circuit)
 {
+	t_porte* file[MAX_PORTES] = { NULL }; /*File de portes*/
+	int nombre,
+		nombre_occuper,
+		nb_iteration = 0;
+	int* porte_courante;
 
+	if (circuit_est_valide(circuit) == 0)
+		return 0; /*Retourne 0 si le circuit n'est pas valide*/
+
+	for (nombre = 0; nombre < circuit->nb_sources; nombre++)
+	{
+		source_propager_signal(circuit->sources[nombre]);
+	}
+
+	for (nombre = 0; nombre < circuit->nb_portes; nombre++)
+	{
+		file[nombre] = circuit->portes[nombre];
+	}
+	nombre_occuper = circuit->nb_portes;
+
+	for (nombre = 0; file[nombre_occuper] != NULL && nb_iteration < circuit->nb_portes * (circuit->nb_portes + 1) / 2; nombre++)
+	{
+		porte_courante = &file[nombre];
+
+		if (porte_propager_signal(porte_courante) == 0)
+		{
+			if (nombre_occuper > MAX_PORTES)
+			{
+				nombre_occuper = 0;
+			}
+			porte_courante[nombre_occuper] = porte_courante;
+			nombre_occuper++;
+		}
+		file[nombre] = NULL;
+		nb_iteration++;
+	}
+	if (nb_iteration > circuit->nb_portes * (circuit->nb_portes + 1) / 2) return 0;
+	return 1; /*Retourne 1 si le signal a été propagé*/
 }
 
 //-------------------------------------------------------------------------------------//
