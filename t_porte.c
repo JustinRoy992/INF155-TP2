@@ -30,14 +30,14 @@ t_porte* porte_init(int id, e_types_portes type, char* nom)
 	porte->nom = (char*)calloc(NOM_TAILLE_MAX, sizeof(char));
 	strcpy(porte->nom, nom); /*Copie du nom dans la chaine dynamique*/
 
-	/* Porte AND ou OR à deux entrées.*/
-   if (type == PORTE_ET || type == PORTE_OU) {
+	/* Porte AND ou OR ou XOR à deux entrées.*/
+   if (type == PORTE_ET || type == PORTE_OU || type == PORTE_XOR) {
 	   porte->nb_entrees = 2; /*Initialiser le nombre d'entrées à 2.*/
 	   porte->entrees[0] = pin_entree_init(); /*Initialiser la première entrée.*/
 	   porte->entrees[1] = pin_entree_init(); /*Initialiser la deuxième entrée.*/
 	   porte->sortie = pin_sortie_init();     /*Initialiser la sortie.*/
 
-	/* Porte NOT ou XOR à une entrée.*/
+	/* Porte NOT à une entrée.*/
    } else {
 	   porte->nb_entrees = 1; /*Initialiser le nombre d'entrées à 1.*/
 	   porte->entrees[0] = pin_entree_init(); /*Initialiser la seule entrée.*/

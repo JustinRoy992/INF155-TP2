@@ -12,7 +12,7 @@ Dernière modification: Eric Thé, 2025-11-1
 
 #ifndef T_PORTE_H_
 #define T_PORTE_H_
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <string.h>
 #include <stdio.h>
 #include "t_pin_entree.h"

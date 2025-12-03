@@ -21,7 +21,7 @@ t_source* source_init(int id, char* nom)
 	nouvelle_source->id = id;
 	nouvelle_source->pin = pin_sortie_init();
 	
-	/*Création de la chaine dynamique pour le nom de la source*//
+	/*Création de la chaine dynamique pour le nom de la source*/
 	nouvelle_source->nom = (char*)calloc(NOM_TAILLE_MAX, sizeof(char)); 
 	strcpy(nouvelle_source->nom, nom); /*Copie du nom dans la chaine dynamique*/
 	return nouvelle_source; /*Retourne la nouvelle source créée*/
@@ -137,7 +137,7 @@ char* source_get_nom(const t_source* source)
 void source_serialiser(const t_source* source, char* resultat)
 {
 	/*Sérialise les informations de la source dans la chaîne resultat.*/
-	sprintf("%d %s", source->id, source->nom);
+	sprintf(resultat, "%d %s", source->id, source->nom);
 }
 
 //-------------------------------------------------------------------------------------//

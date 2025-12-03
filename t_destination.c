@@ -142,7 +142,7 @@ char* dest_get_nom(const t_dest* destination)
 void dest_serialiser(const t_dest* destination, char* resultat)
 {
 	/*Sérialise les informations de la destination dans une chaîne caractères.*/
-	sprintf("%d %s", destination->id, destination->nom);
+	sprintf(resultat, "%d %s", destination->id, destination->nom);
 }
 
 //-------------------------------------------------------------------------------------//
