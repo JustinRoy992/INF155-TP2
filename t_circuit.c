@@ -168,13 +168,14 @@ int circuit_appliquer_signal(t_circuit* circuit, int signal[], int nb_bits)
 	int nombre;
 
 	if (nb_bits < circuit->nb_sources)
-		return FALSE; /*Retourne faux si le nb_bits n'est pas suffisant*/
+		return 0; /*Retourne 0 si le nb_bits n<est pas suffisant*/
 	for (nombre = 0; nombre < nb_bits; nombre++)
 	{
 		circuit->sources[nombre]->pin->valeur = signal[nombre]; /*Applique le signal à la source*/
 	}
-	return TRUE; /*Retourne vrai si le signal a été appliqué*/
+	return 1; /*Retourne 1 si le signal a été appliqué*/
 }
+
 
 //-------------------------------------------------------------------------------------//
 
@@ -217,8 +218,8 @@ int circuit_propager_signal(t_circuit* circuit)
 		nb_iteration = 0;
 	int* porte_courante;
 
-	if (circuit_est_valide(circuit) == FALSE)
-		return FALSE; /*Retourne faux si le circuit n'est pas valide*/
+	if (circuit_est_valide(circuit) == 0)
+		return 0; /*Retourne 0 si le circuit n'est pas valide*/
 
 	for (nombre = 0; nombre < circuit->nb_sources; nombre++)
 	{
@@ -247,9 +248,8 @@ int circuit_propager_signal(t_circuit* circuit)
 		file[nombre] = NULL;
 		nb_iteration++;
 	}
-	/*Retourne faux s'il y a une boucle*/
-	if (nb_iteration > circuit->nb_portes * (circuit->nb_portes + 1) / 2) return FALSE;
-	return TRUE; /*Retourne vrai si le signal a été propagé*/
+	if (nb_iteration > circuit->nb_portes * (circuit->nb_portes + 1) / 2) return 0;
+	return 1; /*Retourne 1 si le signal a été propagé*/
 }
 
 //-------------------------------------------------------------------------------------//

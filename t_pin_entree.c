@@ -74,14 +74,19 @@ void pin_entree_relier(t_pin_entree * pin_entree, char * nom_sortie, t_pin_sorti
 	strcpy(pin_entree->nom_liaison, nom_sortie);      //on copie le nom de la connexion
 
 	pin_sortie_ajouter_lien(pin_sortie, pin_entree);
+	
+	pin_entree->liaison->nb_liaisons++;
 }
 
 /*****************************************************************************/
 //Permet de vérifier si un pin d'entrée est reliée à un pin de sortie.
 int pin_entree_est_reliee(t_pin_entree *pin)
 {
-	return pin->liaison != NULL;
-}
+	if (pin->liaison == NULL)
+		return 0;
+	else return 1;
+	//return pin->liaison != NULL;
+} 
 
 /*****************************************************************************/
 //Ré-initialise la valeur du pin d'entree à INACTIF.

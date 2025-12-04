@@ -127,9 +127,9 @@ void pin_sortie_supprimer_lien(t_pin_sortie* pin_sortie, const t_pin_entree* pin
 
 /*Permet de v�rifier si un pin de sortie est reli�e � un pin d'entr�e.*/
 int pin_sortie_est_reliee(t_pin_sortie* pin){
-
-	return pin->nb_liaisons != 0; /*Retourne vrai si le pin est reli�*/
-	
+	if (pin->nb_liaisons>0)
+	return 1; /*Retourne vrai si le pin est reli�*/
+	else return 0; /*Retourne faux sinon*/
 }
 
 //-------------------------------------------------------------------------------------//

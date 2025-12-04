@@ -102,7 +102,6 @@ Paramètres:
 Retour: (Booléen) Vrai si le circuit est valide, faux sinon.
 */
 int circuit_est_valide(t_circuit *circuit);
-
 /*
 Fonction: CIRCUIT_APPLIQUER_SIGNAL
 Description: Alimente le circuit avec le signal "signal" passé en paramètre. Le signal est un 
@@ -151,7 +150,7 @@ Description: Propage le signal appliqué aux sources du circuit à tous les compos
 			 
 			 La fonction retourne faux s'il a été impossible de propager un signal dans 
 			 l'un des cas suivants:
-			 - Le circuit est invalide (voir t_circuit_est_valide)
+			 - Le circuit est invalide (voir circuit_est_valide)
 			 - Le circuit n'a pas été préalablement alimenté (voir: circuit_appliquer_signal())
 			 - En cas de présence de boucles dans le circuit
 NDE: Pour propager le signal de proche en proche, vous utiliserez l'algorithme décrit dans l'énoncé 
