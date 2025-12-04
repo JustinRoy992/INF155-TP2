@@ -216,7 +216,7 @@ int circuit_propager_signal(t_circuit* circuit)
 	int nombre,
 		nombre_occuper,
 		nb_iteration = 0;
-	int* porte_courante;
+	t_porte* porte_courante=NULL;
 
 	if (circuit_est_valide(circuit) == 0)
 		return 0; /*Retourne 0 si le circuit n'est pas valide*/
@@ -231,18 +231,24 @@ int circuit_propager_signal(t_circuit* circuit)
 		file[nombre] = circuit->portes[nombre];
 	}
 	nombre_occuper = circuit->nb_portes;
-
-	for (nombre = 0; file[nombre_occuper] != NULL && nb_iteration < circuit->nb_portes * (circuit->nb_portes + 1) / 2; nombre++)
+// file[nombre_occuper-1] != NULL && 
+	for (nombre = 0;nb_iteration < circuit->nb_portes * (circuit->nb_portes + 1) / 2 && nb_iteration<nombre_occuper; nombre++)
 	{
-		porte_courante = &file[nombre];
+		if (nombre > MAX_PORTES)
+		{
+			nombre = 0;
+		}
+		
+		//porte_courante = file[nombre];
 
-		if (porte_propager_signal(porte_courante) == 0)
+		//if (porte_propager_signal(porte_courante) == 0)
+		if (porte_propager_signal(file[nombre]) == 0)
 		{
 			if (nombre_occuper > MAX_PORTES)
 			{
 				nombre_occuper = 0;
 			}
-			porte_courante[nombre_occuper] = porte_courante;
+			file[nombre_occuper] = file[nombre];
 			nombre_occuper++;
 		}
 		file[nombre] = NULL;

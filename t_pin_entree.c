@@ -75,7 +75,7 @@ void pin_entree_relier(t_pin_entree * pin_entree, char * nom_sortie, t_pin_sorti
 
 	pin_sortie_ajouter_lien(pin_sortie, pin_entree);
 	
-	pin_entree->liaison->nb_liaisons++;
+	pin_entree->liaison->nb_liaisons;
 }
 
 /*****************************************************************************/

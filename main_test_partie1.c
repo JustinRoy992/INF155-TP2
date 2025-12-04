@@ -257,7 +257,7 @@ void construire_circuit(t_circuit* circuit)
 
 	porte_relier(porte_xor, 0, porte_get_nom(porte_not), porte_get_pin_sortie(porte_not));
 
-	porte_relier(porte_xor, 0, porte_get_nom(porte_et), porte_get_pin_sortie(porte_et));
+	porte_relier(porte_xor, 1, porte_get_nom(porte_et), porte_get_pin_sortie(porte_et));
 
 	dest_relier(dest0, porte_get_nom(porte_not), porte_get_pin_sortie(porte_not));
 

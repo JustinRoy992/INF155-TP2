@@ -143,7 +143,7 @@ int pin_sortie_propager_signal(t_pin_sortie* pin) {
 	int nombre; /*Compteur pour les liaisons*/
 
 	/*V�rification si le pin de sortie est actif et qu'il a des liaisons*/
-	if (pin->valeur != -1 && pin->nb_liaisons < 0) {
+	if (pin->valeur != -1 && pin->nb_liaisons > 0) {
 
 		/*Propager la valeur du pin de sortie � tous les pins d'entr�es reli�s*/
 		for (nombre = 0; nombre < pin->nb_liaisons; nombre++) {
