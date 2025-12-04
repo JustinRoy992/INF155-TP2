@@ -138,7 +138,7 @@ int circuit_est_valide(t_circuit* circuit)
 	for (i = 0; i < circuit->nb_sources; i++)
 	{
 		/*Si la source n'est pas reliée.*/
-		if (!source_est_reliee(circuit->sources))
+		if (!source_est_reliee(circuit->sources[i]))
 		{
 			printf("La source %s n'est pas reliee!\n", source_get_nom(circuit->sources[i]));
 			valide = 0;
